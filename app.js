@@ -116,6 +116,58 @@ async function insertData() {
   insertData();
 
   //Task 3: Insert additional records and output a message
+  async function insertAdditionalData() {
+    const { MongoClient } = require("mongodb");
+    const url = "mongodb://127.0.0.1:27017";
+    const dbName = "statsdb";
+    const client = new MongoClient(url);
+  
+    try {
+      await client.connect();
+      const db = client.db(dbName);
+      const collection = db.collection("uscensus");
+  
+      const newStats = [
+        { city: "Pacoima", zip: "91331", state: "CA", income: "60360", age: "33" },
+        { city: "Ketchikan", zip: "99950", state: "AK", income: "00000", age: "00" }
+      ];
+  
+      const result = await collection.insertMany(newStats);
+      console.log(`${result.insertedCount} new records inserted into 'uscensus' collection`);
+    } catch (error) {
+      console.error("Error inserting new data:", error);
+    } finally {
+      await client.close();
+    }
+  }
+  
+  insertAdditionalData();
   
 
+  //Task 4 : Zip code 
+  async function findZipForCorona() {
+    const { MongoClient } = require("mongodb");
+    const url = "mongodb://127.0.0.1:27017";
+    const dbName = "statsdb";
+    const client = new MongoClient(url);
+  
+    try {
+      await client.connect();
+      const db = client.db(dbName);
+      const collection = db.collection("uscensus");
+  
+      const result = await collection.findOne({ city: "Corona", state: "NY" });
+      if (result) {
+        console.log(`Zip code for Corona, NY is: ${result.zip}`);
+      } else {
+        console.log("City not found");
+      }
+    } catch (error) {
+      console.error("Error finding zip code:", error);
+    } finally {
+      await client.close();
+    }
+  }
+  
+  findZipForCorona();
   
