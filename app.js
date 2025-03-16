@@ -82,3 +82,40 @@ async function createDatabase() {
 
 // Call the function to create the database
 createDatabase();
+
+//Task 2: Create collection called uscencus
+async function insertData() {
+    const { MongoClient } = require("mongodb");
+    const url = "mongodb://127.0.0.1:27017";
+    const dbName = "statsdb";
+    const client = new MongoClient(url);
+  
+    try {
+      await client.connect();
+      const db = client.db(dbName);
+      const collection = db.collection("uscensus");
+  
+      const stats = [
+        { city: "San Juan", zip: "00926", state: "PR", income: "34781", age: "44" },
+        { city: "Corona", zip: "11368", state: "NY", income: "50797", age: "32" },
+        { city: "Chicago", zip: "60629", state: "IL", income: "42019", age: "31" },
+        { city: "El Paso", zip: "79936", state: "TX", income: "54692", age: "31" },
+        { city: "Los Angeles", zip: "90011", state: "CA", income: "36954", age: "28" },
+        { city: "Norwalk", zip: "90650", state: "CA", income: "66453", age: "35" }
+      ];
+  
+      const result = await collection.insertMany(stats);
+      console.log(`${result.insertedCount} records inserted into 'uscensus' collection`);
+    } catch (error) {
+      console.error("Error inserting data:", error);
+    } finally {
+      await client.close();
+    }
+  }
+  
+  insertData();
+
+  //Task 3: Insert additional records and output a message
+  
+
+  
