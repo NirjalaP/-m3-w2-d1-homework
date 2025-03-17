@@ -195,7 +195,33 @@ async function findIncomeInCalifornia() {
   }
   
   findIncomeInCalifornia();
-  
-  //Task 6: Update the income and age for Alaska
 
+  //Task 6: Update the income and age for Alaska
+  
+  async function updateAlaskaData() {
+    const { MongoClient } = require("mongodb");
+    const url = "mongodb://127.0.0.1:27017";
+    const dbName = "statsdb";
+    const client = new MongoClient(url);
+  
+    try {
+      await client.connect();
+      const db = client.db(dbName);
+      const collection = db.collection("uscensus");
+  
+      const result = await collection.updateMany(
+        { state: "AK" },
+        { $set: { income: "38910", age: "46" } }
+      );
+  
+      console.log(`${result.modifiedCount} documents updated for Alaska`);
+    } catch (error) {
+      console.error("Error updating data for Alaska:", error);
+    } finally {
+      await client.close();
+    }
+  }
+  
+  updateAlaskaData();
+  
   
