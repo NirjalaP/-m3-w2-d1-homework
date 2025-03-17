@@ -170,4 +170,32 @@ async function insertData() {
   }
   
   findZipForCorona();
+
+//   Task 5: Finding income
+async function findIncomeInCalifornia() {
+    const { MongoClient } = require("mongodb");
+    const url = "mongodb://127.0.0.1:27017";
+    const dbName = "statsdb";
+    const client = new MongoClient(url);
+  
+    try {
+      await client.connect();
+      const db = client.db(dbName);
+      const collection = db.collection("uscensus");
+  
+      const californiaCities = await collection.find({ state: "CA" }).toArray();
+      californiaCities.forEach(city => {
+        console.log(`City: ${city.city}, Income: ${city.income}`);
+      });
+    } catch (error) {
+      console.error("Error finding income in California:", error);
+    } finally {
+      await client.close();
+    }
+  }
+  
+  findIncomeInCalifornia();
+  
+  //Task 6: Update the income and age for Alaska
+
   
