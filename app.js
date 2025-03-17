@@ -223,5 +223,30 @@ async function findIncomeInCalifornia() {
   }
   
   updateAlaskaData();
+
+  //Task 7: Sort records in ascending order
+  async function sortByState() {
+    const { MongoClient } = require("mongodb");
+    const url = "mongodb://127.0.0.1:27017";
+    const dbName = "statsdb";
+    const client = new MongoClient(url);
+  
+    try {
+      await client.connect();
+      const db = client.db(dbName);
+      const collection = db.collection("uscensus");
+  
+      const sortedRecords = await collection.find().sort({ state: 1 }).toArray(); // 1 for ascending order
+      console.log("Sorted Records by State:");
+      sortedRecords.forEach(record => console.log(record));
+    } catch (error) {
+      console.error("Error sorting by state:", error);
+    } finally {
+      await client.close();
+    }
+  }
+  
+  sortByState();
+  
   
   
